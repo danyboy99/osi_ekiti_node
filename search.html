@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search for Family & Friends - Osi-Ekiti</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="register.css" />
+    <script src="javascript.js" defer></script>
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo">👑 <span>OSI-EKITI</span></div>
+
+      <!-- Mobile Menu Button -->
+      <button class="menu-toggle" id="menuToggle">&#9776;</button>
+
+      <nav class="nav" id="navMenu">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">About Us ▾</a>
+            <ul class="dropdown-content">
+              <li><a href="about.html#our-history">Our History</a></li>
+              <li>
+                <a href="about.html#rulling-house">The Ruling Houses</a>
+              </li>
+              <li>
+                <a href="about.html#functional-groups"
+                  >The Functional Groups & Authority</a
+                >
+              </li>
+              <li>
+                <a href="about.html#council-of-chiefs">The Council Of Chiefs</a>
+              </li>
+              <li><a href="about.html#quarters">The Quarters</a></li>
+              <li>
+                <a href="about.html#traditional-age-groups"
+                  >The Traditional Age Groups</a
+                >
+              </li>
+              <li>
+                <a href="about.html#club-and-societies">Club & Societies</a>
+              </li>
+              <li>
+                <a href="about.html#place-of-intrest">Places of Interest</a>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">Community ▾</a>
+            <ul class="dropdown-content">
+              <li><a href="register.html">Register As Omo Osi</a></li>
+              <li><a href="search.html">Search for Family & Friends</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">Events ▾</a>
+            <ul class="dropdown-content">
+              <li><a href="events.html#current-events">Current Events</a></li>
+              <li><a href="events.html#upcoming-events">Upcoming Events</a></li>
+              <li><a href="events.html#monthly-events">Monthly Events</a></li>
+              <li><a href="events.html#seasonal-events">Seasonal Events</a></li>
+            </ul>
+          </li>
+          <li><a href="information-center.html">Information Center</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="contact-us.html">Contact Us</a></li>
+          <li><a href="donate.html" class="btn">Donate</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Search Section -->
+    <section class="registration-section">
+      <div class="registration-container">
+        <!-- Left Side - Image -->
+        <div class="image-section">
+          <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=600&h=800&fit=crop&crop=center" alt="Community Search" class="hero-image" />
+        </div>
+
+        <!-- Right Side - Search Form -->
+        <div class="form-section">
+          <div class="form-container">
+            <div class="form-header">
+              <h1>Find Your Family & Friends</h1>
+              <p>Search our community database to reconnect with loved ones and discover fellow Omo Osi members.</p>
+            </div>
+
+            <form class="registration-form" id="searchForm">
+              <div class="form-group">
+                <label for="searchName">Full Name or Family Name</label>
+                <input type="text" id="searchName" name="searchName" placeholder="Enter name to search" required />
+              </div>
+
+              <div class="form-group">
+                <label for="searchQuarters">Quarters (Optional)</label>
+                <input type="text" id="searchQuarters" name="searchQuarters" placeholder="e.g., Isale Osi, Oke Osi" />
+              </div>
+
+              <div class="form-group">
+                <label for="searchLocation">Current Location (Optional)</label>
+                <div class="location-input">
+                  <span class="location-icon">📍</span>
+                  <input type="text" id="searchLocation" name="searchLocation" placeholder="Lagos, NG" />
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn-cancel">Clear</button>
+                <button type="submit" class="btn-submit">Search Now</button>
+              </div>
+            </form>
+
+            <!-- Search Results Section -->
+            <div id="searchResults" class="search-results" style="display: none;">
+              <h3>Search Results</h3>
+              <div id="resultsList" class="results-list">
+                <!-- Results will be populated here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <style>
+      .search-results {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #ddd;
+      }
+
+      .search-results h3 {
+        color: #333;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+      }
+
+      .results-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .result-item {
+        padding: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+      }
+
+      .result-item h4 {
+        color: #8B4513;
+        margin-bottom: 0.5rem;
+      }
+
+      .result-item p {
+        margin: 0.25rem 0;
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .no-results {
+        text-align: center;
+        color: #666;
+        font-style: italic;
+        padding: 2rem;
+      }
+    </style>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const searchForm = document.getElementById("searchForm");
+        const searchResults = document.getElementById("searchResults");
+        const resultsList = document.getElementById("resultsList");
+        const clearBtn = document.querySelector(".btn-cancel");
+
+        // Sample data (this would come from your PHP API)
+        const sampleMembers = [
+          {
+            fullname: "Adebayo Ogundimu",
+            family_name: "Ogundimu",
+            quarters: "Isale Osi",
+            current_address: "Lagos, Nigeria",
+            phone_no: "+234-801-234-5678"
+          },
+          {
+            fullname: "Folake Adeyemi",
+            family_name: "Adeyemi", 
+            quarters: "Oke Osi",
+            current_address: "Abuja, Nigeria",
+            phone_no: "+234-802-345-6789"
+          }
+        ];
+
+        searchForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          
+          const searchName = document.getElementById("searchName").value.toLowerCase();
+          const searchQuarters = document.getElementById("searchQuarters").value.toLowerCase();
+          const searchLocation = document.getElementById("searchLocation").value.toLowerCase();
+
+          // Filter results based on search criteria
+          const results = sampleMembers.filter(member => {
+            const nameMatch = member.fullname.toLowerCase().includes(searchName) || 
+                            member.family_name.toLowerCase().includes(searchName);
+            const quartersMatch = !searchQuarters || member.quarters.toLowerCase().includes(searchQuarters);
+            const locationMatch = !searchLocation || member.current_address.toLowerCase().includes(searchLocation);
+            
+            return nameMatch && quartersMatch && locationMatch;
+          });
+
+          displayResults(results);
+        });
+
+        clearBtn.addEventListener("click", () => {
+          searchForm.reset();
+          searchResults.style.display = "none";
+        });
+
+        function displayResults(results) {
+          searchResults.style.display = "block";
+          
+          if (results.length === 0) {
+            resultsList.innerHTML = '<div class="no-results">No members found matching your search criteria.</div>';
+            return;
+          }
+
+          resultsList.innerHTML = results.map(member => `
+            <div class="result-item">
+              <h4>${member.fullname}</h4>
+              <p><strong>Family:</strong> ${member.family_name}</p>
+              <p><strong>Quarters:</strong> ${member.quarters}</p>
+              <p><strong>Location:</strong> ${member.current_address}</p>
+              <p><strong>Phone:</strong> ${member.phone_no}</p>
+            </div>
+          `).join('');
+        }
+      });
+    </script>
+  </body>
+</html>

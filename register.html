@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Osi-Ekiti</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="register.css" />
+    <script src="javascript.js" defer></script>
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo">👑 <span>OSI-EKITI</span></div>
+
+      <!-- Mobile Menu Button -->
+      <button class="menu-toggle" id="menuToggle">&#9776;</button>
+
+      <nav class="nav" id="navMenu">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">About Us ▾</a>
+            <ul class="dropdown-content">
+              <li><a href="about.html#our-history">Our History</a></li>
+              <li>
+                <a href="about.html#rulling-house">The Ruling Houses</a>
+              </li>
+              <li>
+                <a href="about.html#functional-groups"
+                  >The Functional Groups & Authority</a
+                >
+              </li>
+              <li>
+                <a href="about.html#council-of-chiefs">The Council Of Chiefs</a>
+              </li>
+              <li><a href="about.html#quarters">The Quarters</a></li>
+              <li>
+                <a href="about.html#traditional-age-groups"
+                  >The Traditional Age Groups</a
+                >
+              </li>
+              <li>
+                <a href="about.html#club-and-societies">Club & Societies</a>
+              </li>
+              <li>
+                <a href="about.html#place-of-intrest">Places of Interest</a>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">Community ▾</a>
+            <ul class="dropdown-content">
+              <li><a href="register.html">Register As Omo Osi</a></li>
+              <li><a href="search.html">Search for Family & Friends</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">Events ▾</a>
+            <ul class="dropdown-content">
+              <li><a href="events.html#current-events">Current Events</a></li>
+              <li><a href="events.html#upcoming-events">Upcoming Events</a></li>
+              <li><a href="events.html#monthly-events">Monthly Events</a></li>
+              <li><a href="events.html#seasonal-events">Seasonal Events</a></li>
+            </ul>
+          </li>
+          <li><a href="information-center.html">Information Center</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="contact-us.html">Contact Us</a></li>
+          <li><a href="donate.html" class="btn">Donate</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Registration Section -->
+    <section class="registration-section">
+      <div class="registration-container">
+        <!-- Left Side - Image -->
+        <div class="image-section">
+          <img
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=800&fit=crop&crop=center"
+            alt="Omo Osi"
+            class="hero-image"
+          />
+        </div>
+
+        <!-- Right Side - Form -->
+        <div class="form-section">
+          <div class="form-container">
+            <div class="form-header">
+              <h1>Claim Your Roots as an Omo Osi</h1>
+              <p>Join our growing digital family and stay connected to home.</p>
+            </div>
+
+            <form class="registration-form" id="registrationForm">
+              <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  placeholder="Your name"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="you@email.com"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="familyName">Family Name</label>
+                <input
+                  type="text"
+                  id="familyName"
+                  name="familyName"
+                  placeholder="Your family name"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="phone">Phone number</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  placeholder="+234-801-234-5678"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="quarters">Quarters</label>
+                <select id="quarters" name="quarters" required>
+                  <option value="">Select your quarters</option>
+                  <option value="Isale Osi">Isale Osi</option>
+                  <option value="Oke Osi">Oke Osi</option>
+                  <option value="Agbado">Agbado</option>
+                  <option value="Odo Osi">Odo Osi</option>
+                  <option value="Oke Agbe">Oke Agbe</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="location">Current location</label>
+                <div class="location-input">
+                  <span class="location-icon">📍</span>
+                  <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    placeholder="Lagos, NG"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn-cancel">Cancel</button>
+                <button type="submit" class="btn-submit" id="submitBtn">
+                  Register Now
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("registrationForm");
+        const submitBtn = document.getElementById("submitBtn");
+        const cancelBtn = document.querySelector(".btn-cancel");
+
+        // Handle form submission
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          // Show loading state
+          const originalText = submitBtn.textContent;
+          submitBtn.textContent = "Registering...";
+          submitBtn.disabled = true;
+
+          try {
+            // Get form data
+            const formData = new FormData(form);
+            const userData = {
+              fullname: formData.get("fullName"),
+              email: formData.get("email"),
+              family_name: formData.get("familyName"),
+              phone_no: formData.get("phone"),
+              quarters: formData.get("quarters"),
+              current_address: formData.get("location"),
+            };
+
+            // Send to API
+            const response = await fetch("api/index.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(userData),
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+              // Success
+              alert(
+                "Registration successful! Welcome to the Osi-Ekiti community!"
+              );
+              form.reset();
+            } else {
+              // Error
+              const errorMessage =
+                result.error || "Registration failed. Please try again.";
+              alert("Error: " + errorMessage);
+            }
+          } catch (error) {
+            console.error("Registration error:", error);
+            alert("Network error. Please check your connection and try again.");
+          } finally {
+            // Reset button state
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+          }
+        });
+
+        // Handle cancel button
+        cancelBtn.addEventListener("click", function () {
+          if (confirm("Are you sure you want to cancel registration?")) {
+            form.reset();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

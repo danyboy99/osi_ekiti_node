@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Donate - Osi-Ekiti</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="donate.css" />
+    <script src="javascript.js" defer></script>
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo">👑 <span>Osi-Ekiti</span></div>
+
+      <!-- Mobile Menu Button -->
+      <button class="menu-toggle" id="menuToggle">&#9776;</button>
+
+      <nav class="nav" id="navMenu">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">About Us ▾</a>
+            <ul class="dropdown-content">
+              <li><a href="about.html#our-history">Our History</a></li>
+              <li>
+                <a href="about.html#rulling-house">The Ruling Houses</a>
+              </li>
+              <li>
+                <a href="about.html#functional-groups"
+                  >The Functional Groups & Authority</a
+                >
+              </li>
+              <li>
+                <a href="about.html#council-of-chiefs">The Council Of Chiefs</a>
+              </li>
+              <li><a href="about.html#quarters">The Quarters</a></li>
+              <li>
+                <a href="about.html#traditional-age-groups"
+                  >The Traditional Age Groups</a
+                >
+              </li>
+              <li>
+                <a href="about.html#club-and-societies">Club & Societies</a>
+              </li>
+              <li>
+                <a href="about.html#place-of-intrest">Places of Interest</a>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">Events ▾</a>
+            <ul class="dropdown-content">
+              <li><a href="events.html#current-events">Current Events</a></li>
+              <li><a href="events.html#upcoming-events">Upcoming Events</a></li>
+              <li><a href="events.html#monthly-events">Monthly Events</a></li>
+              <li><a href="events.html#seasonal-events">Seasonal Events</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">Community ▾</a>
+            <ul class="dropdown-content">
+              <li><a href="register.html">Register As Omo Osi</a></li>
+              <li><a href="search.html">Search for Family & Friends</a></li>
+            </ul>
+          </li>
+          <li><a href="information-center.html">Information Center</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="contact-us.html">Contact Us</a></li>
+          <li><a href="donate.html" class="btn">Donate</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Donation Section -->
+    <section class="donation-section">
+      <div class="donation-container">
+        <div class="donation-header">
+          <div class="label">Support</div>
+          <h1>Support Our Community</h1>
+          <p class="donation-intro">
+            Your generous contributions help us preserve our heritage, support
+            community development, and strengthen the bonds that unite Osi-Ekiti
+            people worldwide.
+          </p>
+        </div>
+
+        <div class="donation-content">
+          <div class="donation-card">
+            <div class="card-header">
+              <div class="icon">🏦</div>
+              <h2>Community Account Details</h2>
+              <p>
+                Make your donation directly to our official community account
+              </p>
+            </div>
+
+            <div class="account-details">
+              <div class="detail-item">
+                <div class="detail-label">
+                  <span class="detail-icon">🏛️</span>
+                  Bank Name
+                </div>
+                <div class="detail-value">First Bank</div>
+              </div>
+
+              <div class="detail-item">
+                <div class="detail-label">
+                  <span class="detail-icon">🔢</span>
+                  Account Number
+                </div>
+                <div class="detail-value">2001787203</div>
+                <button
+                  class="copy-btn"
+                  onclick="copyToClipboard('2001787203')"
+                >
+                  📋 Copy
+                </button>
+              </div>
+
+              <div class="detail-item">
+                <div class="detail-label">
+                  <span class="detail-icon">👥</span>
+                  Account Name
+                </div>
+                <div class="detail-value">Òsi Progressive Union</div>
+              </div>
+            </div>
+
+            <div class="donation-note">
+              <div class="note-icon">💡</div>
+              <div class="note-content">
+                <h3>Important Note</h3>
+                <p>
+                  Please send a confirmation message or receipt to our contact
+                  channels after making your donation. This helps us acknowledge
+                  your contribution and keep proper records for community
+                  transparency.
+                </p>
+              </div>
+            </div>
+
+            <div class="donation-actions">
+              <a href="contact-us.html" class="btn-primary">
+                📞 Contact Us After Donation
+              </a>
+              <a href="about.html" class="btn-secondary">
+                🏛️ Learn About Our Community
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // Copy to clipboard functionality
+      function copyToClipboard(text) {
+        // Get the button that was clicked
+        const copyBtn = event.target;
+        const originalText = copyBtn.innerHTML;
+
+        // Try modern clipboard API first
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard
+            .writeText(text)
+            .then(function () {
+              // Show success feedback
+              copyBtn.innerHTML = "✅ Copied!";
+              copyBtn.style.background = "#28a745";
+
+              setTimeout(function () {
+                copyBtn.innerHTML = originalText;
+                copyBtn.style.background = "#6aaed8";
+              }, 2000);
+            })
+            .catch(function (err) {
+              console.error("Failed to copy: ", err);
+              fallbackCopy(text, copyBtn, originalText);
+            });
+        } else {
+          // Fallback for older browsers or non-secure contexts
+          fallbackCopy(text, copyBtn, originalText);
+        }
+      }
+
+      function fallbackCopy(text, copyBtn, originalText) {
+        try {
+          const textArea = document.createElement("textarea");
+          textArea.value = text;
+          textArea.style.position = "fixed";
+          textArea.style.left = "-999999px";
+          textArea.style.top = "-999999px";
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+
+          const successful = document.execCommand("copy");
+          document.body.removeChild(textArea);
+
+          if (successful) {
+            // Show success feedback
+            copyBtn.innerHTML = "✅ Copied!";
+            copyBtn.style.background = "#28a745";
+
+            setTimeout(function () {
+              copyBtn.innerHTML = originalText;
+              copyBtn.style.background = "#6aaed8";
+            }, 2000);
+          } else {
+            throw new Error("Copy command failed");
+          }
+        } catch (err) {
+          console.error("Fallback copy failed: ", err);
+          // Show error feedback
+          copyBtn.innerHTML = "❌ Failed";
+          copyBtn.style.background = "#dc3545";
+
+          setTimeout(function () {
+            copyBtn.innerHTML = originalText;
+            copyBtn.style.background = "#6aaed8";
+          }, 2000);
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,619 @@
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Playfair Display", serif;
+  line-height: 1.6;
+  color: #333;
+  background: #f8f9fa;
+}
+
+/* Navigation Styles (matching your project) */
+.navbar {
+  background: rgba(106, 174, 216, 0.5);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.logo span {
+  color: var(--black, #090a04);
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.nav {
+  display: flex;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+.nav-links a {
+  color: rgba(9, 10, 4, 0.6);
+  font-family: "Playfair Display", serif;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 6px 10px;
+}
+
+.nav-links .btn {
+  background-color: transparent;
+  border: 1px solid rgba(9, 10, 4, 0.6);
+  border-radius: 5px;
+  padding: 8px 16px;
+}
+
+/* Dropdown */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: rgba(106, 174, 216, 0.5);
+  margin-top: 10px;
+  padding: 10px 0;
+  border-radius: 5px;
+  list-style: none;
+  z-index: 999;
+}
+
+.dropdown-content li a {
+  display: block;
+  padding: 5px 15px;
+  white-space: nowrap;
+  color: rgba(9, 10, 4, 0.6);
+}
+
+.dropdown.show .dropdown-content {
+  display: block;
+}
+
+/* Mobile menu toggle */
+.menu-toggle {
+  display: none;
+  font-size: 24px;
+  background: transparent;
+  color: var(--black, #090a04);
+  border: none;
+  cursor: pointer;
+}
+
+/* Page Header */
+.page-header {
+  padding: 3rem 5%;
+  background: linear-gradient(to bottom, #6aaed880 0%, #f8f8f8 17.5%);
+  color: #333;
+}
+
+.header-content {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.header-content .label {
+  display: inline-block;
+  font-size: 12px;
+  color: #c19f32;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.page-header h1 {
+  color: var(--black, #090a04);
+  font-size: 2.5rem;
+  font-weight: bold;
+  font-family: "Playfair Display", serif;
+  margin-bottom: 1rem;
+  text-transform: capitalize;
+  position: relative;
+}
+
+.page-header h1::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: #c19f32;
+  border-radius: 2px;
+}
+
+.page-header h1::after {
+  content: "🚀";
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.8rem;
+  color: #c19f32;
+}
+
+.page-intro {
+  font-size: 1rem;
+  color: var(--black, #090a04);
+  line-height: 1.6;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Project Sections */
+.project-section {
+  padding: 4rem 5%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.project-section:nth-child(even) {
+  background: rgba(106, 174, 216, 0.05);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.section-header h2 {
+  font-size: 2.2rem;
+  color: #090a04;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.section-header p {
+  font-size: 1.1rem;
+  color: #666;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Project Cards */
+.project-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border-top: 4px solid #c19f32;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 0;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.project-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Project Image */
+.project-image {
+  position: relative;
+  height: 300px;
+  overflow: hidden;
+}
+
+.project-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-image img {
+  transform: scale(1.05);
+}
+
+/* Project Status Badges */
+.project-status {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.project-status.ongoing {
+  background: #28a745;
+  color: white;
+  animation: pulse 2s infinite;
+}
+
+.project-status.completed {
+  background: #6aaed8;
+  color: white;
+}
+
+.project-status.planning {
+  background: #ffc107;
+  color: #333;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Project Content */
+.project-content {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.project-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.project-category,
+.project-timeline {
+  font-size: 0.9rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.project-content h3 {
+  font-size: 1.6rem;
+  color: #090a04;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.project-content p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+/* Project Details */
+.project-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(106, 174, 216, 0.05);
+  border-radius: 8px;
+}
+
+.detail-item {
+  text-align: center;
+}
+
+.detail-label {
+  display: block;
+  font-size: 0.8rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.3rem;
+}
+
+.detail-value {
+  display: block;
+  font-size: 1rem;
+  color: #090a04;
+  font-weight: 600;
+}
+
+/* Project Actions */
+.project-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  flex: 1;
+  min-width: 120px;
+}
+
+.btn-primary {
+  background: #c19f32;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #a68929;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(193, 159, 50, 0.3);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #c19f32;
+  border: 2px solid #c19f32;
+}
+
+.btn-secondary:hover {
+  background: #c19f32;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Projects Summary Section */
+.projects-summary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 4rem 5%;
+  text-align: center;
+}
+
+.summary-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.summary-content p {
+  font-size: 1.1rem;
+  max-width: 800px;
+  margin: 0 auto 3rem auto;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.stat-number {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #ffd700;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 1rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary.large,
+.btn-secondary.large {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  min-width: 200px;
+}
+
+/* Mobile Navigation */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .logo span {
+    font-size: 1.1rem;
+  }
+
+  .menu-toggle {
+    display: block;
+    order: 3;
+  }
+
+  .nav {
+    display: none;
+    width: 100%;
+    order: 4;
+    margin-top: 1rem;
+  }
+
+  .nav.active {
+    display: block;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 0.5rem;
+    background: rgba(106, 174, 216, 0.8);
+    padding: 1rem;
+    border-radius: 5px;
+  }
+
+  .nav-links a {
+    padding: 10px;
+    border-bottom: 1px solid rgba(9, 10, 4, 0.1);
+  }
+
+  .dropdown-content {
+    position: static;
+    display: none;
+    box-shadow: none;
+    background: rgba(255, 255, 255, 0.1);
+    margin-top: 5px;
+  }
+
+  .dropdown.show .dropdown-content {
+    display: block;
+  }
+
+  /* Mobile Project Layout */
+  .page-header {
+    padding: 2rem 3%;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+  }
+
+  .project-section {
+    padding: 2rem 3%;
+  }
+
+  .section-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .project-card {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+
+  .project-image {
+    height: 200px;
+  }
+
+  .project-content {
+    padding: 1.5rem;
+  }
+
+  .project-content h3 {
+    font-size: 1.3rem;
+  }
+
+  .project-details {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .project-actions {
+    flex-direction: column;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+  }
+
+  .projects-summary {
+    padding: 2rem 3%;
+  }
+
+  .summary-content h2 {
+    font-size: 2rem;
+  }
+
+  .summary-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn-primary.large,
+  .btn-secondary.large {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .project-image {
+    height: 150px;
+  }
+
+  .project-content {
+    padding: 1rem;
+  }
+
+  .project-content h3 {
+    font-size: 1.2rem;
+  }
+
+  .project-status {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .summary-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-number {
+    font-size: 1.8rem;
+  }
+
+  .summary-content h2 {
+    font-size: 1.8rem;
+  }
+}
