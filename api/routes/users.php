@@ -12,16 +12,46 @@
 function createUser() {
     try {
         // Get JSON input (like req.body in Express.js)
-        $input = json_decode(file_get_contents('php://input'), true);
+        $rawInput = file_get_contents('php://input');
+        $input = json_decode($rawInput, true);
+
+        // Check for JSON parsing errors
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            http_response_code(400);
+            echo json_encode([
+                'error' => 'Invalid JSON format',
+                'details' => ['Please ensure you are sending valid JSON data']
+            ]);
+            return;
+        }
+
+        // Check if input is empty
+        if (empty($input)) {
+            http_response_code(400);
+            echo json_encode([
+                'error' => 'No data provided',
+                'details' => ['Please provide user registration data']
+            ]);
+            return;
+        }
 
         // Validate required fields based on your schema
         $requiredFields = ['fullname', 'email', 'family_name', 'phone_no', 'quarters', 'current_address'];
+        $missingFields = [];
+
         foreach ($requiredFields as $field) {
             if (!isset($input[$field]) || empty(trim($input[$field]))) {
-                http_response_code(400);
-                echo json_encode(['error' => "Missing required field: $field"]);
-                return;
+                $missingFields[] = ucfirst(str_replace('_', ' ', $field)) . ' is required';
             }
+        }
+
+        if (!empty($missingFields)) {
+            http_response_code(400);
+            echo json_encode([
+                'error' => 'Missing required fields',
+                'details' => $missingFields
+            ]);
+            return;
         }
 
         // Create database connection
@@ -49,7 +79,7 @@ function createUser() {
 
             $response = [
                 'success' => true,
-                'message' => 'User created successfully',
+                'message' => 'Registration successful! Welcome to the Osi-Ekiti community!',
                 'data' => $createdUser
             ];
 
@@ -57,12 +87,32 @@ function createUser() {
             echo json_encode($response);
         } else {
             http_response_code(500);
-            echo json_encode(['error' => 'Failed to create user']);
+            echo json_encode([
+                'error' => 'Failed to create user account',
+                'details' => ['There was a problem saving your information. Please try again.']
+            ]);
         }
 
+    } catch (PDOException $e) {
+        // Database specific errors
+        http_response_code(500);
+        if (strpos($e->getMessage(), 'Duplicate entry') !== false) {
+            echo json_encode([
+                'error' => 'Email already exists',
+                'details' => ['This email address is already registered. Please use a different email.']
+            ]);
+        } else {
+            echo json_encode([
+                'error' => 'Database error',
+                'details' => ['Unable to save your information. Please try again later.']
+            ]);
+        }
     } catch (Exception $e) {
         http_response_code(500);
-        echo json_encode(['error' => 'Internal server error: ' . $e->getMessage()]);
+        echo json_encode([
+            'error' => 'Server error',
+            'details' => ['An unexpected error occurred. Please try again later.']
+        ]);
     }
 }
 
@@ -72,42 +122,28 @@ function createUser() {
  */
 function getUsers() {
     try {
-        // TODO: Fetch from database
-        // For now, return sample data with your schema
-        $users = [
-            [
-                'id' => 1,
-                'fullname' => 'Adebayo Ogundimu',
-                'email' => 'adebayo@example.com',
-                'family_name' => 'Ogundimu',
-                'phone_no' => '+234-801-234-5678',
-                'quarters' => 'Isale Osi',
-                'current_address' => 'Lagos, Nigeria',
-                'created_at' => '2024-01-15 10:30:00'
-            ],
-            [
-                'id' => 2,
-                'fullname' => 'Folake Adeyemi',
-                'email' => 'folake@example.com',
-                'family_name' => 'Adeyemi',
-                'phone_no' => '+234-802-345-6789',
-                'quarters' => 'Oke Osi',
-                'current_address' => 'Abuja, Nigeria',
-                'created_at' => '2024-01-20 14:45:00'
-            ]
-        ];
-        
+        // Create database connection
+        $database = new Database();
+        $db = $database->getConnection();
+
+        // Include User model
+        require_once '../models/User.php';
+        $user = new User($db);
+
+        // Fetch all users from database
+        $users = $user->getAll();
+
         $response = [
             'success' => true,
             'data' => $users,
             'count' => count($users)
         ];
-        
+
         echo json_encode($response);
-        
+
     } catch (Exception $e) {
         http_response_code(500);
-        echo json_encode(['error' => 'Internal server error']);
+        echo json_encode(['error' => 'Internal server error: ' . $e->getMessage()]);
     }
 }
 
@@ -118,39 +154,36 @@ function getUsers() {
 function searchUsers() {
     try {
         $searchTerm = $_GET['q'] ?? '';
-        
+
         if (empty($searchTerm)) {
             http_response_code(400);
             echo json_encode(['error' => 'Search term is required']);
             return;
         }
-        
-        // TODO: Search in database
-        // For now, return sample filtered data
-        $results = [
-            [
-                'id' => 1,
-                'fullname' => 'Adebayo Ogundimu',
-                'email' => 'adebayo@example.com',
-                'family_name' => 'Ogundimu',
-                'phone_no' => '+234-801-234-5678',
-                'quarters' => 'Isale Osi',
-                'current_address' => 'Lagos, Nigeria'
-            ]
-        ];
-        
+
+        // Create database connection
+        $database = new Database();
+        $db = $database->getConnection();
+
+        // Include User model
+        require_once '../models/User.php';
+        $user = new User($db);
+
+        // Search in database
+        $results = $user->search($searchTerm);
+
         $response = [
             'success' => true,
             'data' => $results,
             'searchTerm' => $searchTerm,
             'count' => count($results)
         ];
-        
+
         echo json_encode($response);
-        
+
     } catch (Exception $e) {
         http_response_code(500);
-        echo json_encode(['error' => 'Internal server error']);
+        echo json_encode(['error' => 'Internal server error: ' . $e->getMessage()]);
     }
 }
 
@@ -161,32 +194,54 @@ function searchUsers() {
 function updateUser() {
     try {
         $userId = $_GET['id'] ?? '';
-        
+
         if (empty($userId)) {
             http_response_code(400);
             echo json_encode(['error' => 'User ID is required']);
             return;
         }
-        
+
         // Get JSON input
         $input = json_decode(file_get_contents('php://input'), true);
-        
-        // TODO: Update in database
-        // For now, just return success response
-        $response = [
-            'success' => true,
-            'message' => 'User updated successfully',
-            'data' => [
-                'id' => $userId,
-                'updated_at' => date('Y-m-d H:i:s')
-            ]
-        ];
-        
-        echo json_encode($response);
-        
+
+        // Create database connection
+        $database = new Database();
+        $db = $database->getConnection();
+
+        // Include User model
+        require_once '../models/User.php';
+        $user = new User($db);
+
+        // Validate user data
+        $errors = $user->validate($input, true, $userId);
+        if (!empty($errors)) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Validation failed', 'details' => $errors]);
+            return;
+        }
+
+        // Update user in database
+        $success = $user->update($userId, $input);
+
+        if ($success) {
+            // Get the updated user
+            $updatedUser = $user->findById($userId);
+
+            $response = [
+                'success' => true,
+                'message' => 'User updated successfully',
+                'data' => $updatedUser
+            ];
+
+            echo json_encode($response);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to update user']);
+        }
+
     } catch (Exception $e) {
         http_response_code(500);
-        echo json_encode(['error' => 'Internal server error']);
+        echo json_encode(['error' => 'Internal server error: ' . $e->getMessage()]);
     }
 }
 
@@ -197,29 +252,51 @@ function updateUser() {
 function deleteUser() {
     try {
         $userId = $_GET['id'] ?? '';
-        
+
         if (empty($userId)) {
             http_response_code(400);
             echo json_encode(['error' => 'User ID is required']);
             return;
         }
-        
-        // TODO: Delete from database
-        // For now, just return success response
-        $response = [
-            'success' => true,
-            'message' => 'User deleted successfully',
-            'data' => [
-                'id' => $userId,
-                'deleted_at' => date('Y-m-d H:i:s')
-            ]
-        ];
-        
-        echo json_encode($response);
-        
+
+        // Create database connection
+        $database = new Database();
+        $db = $database->getConnection();
+
+        // Include User model
+        require_once '../models/User.php';
+        $user = new User($db);
+
+        // Check if user exists
+        $existingUser = $user->findById($userId);
+        if (!$existingUser) {
+            http_response_code(404);
+            echo json_encode(['error' => 'User not found']);
+            return;
+        }
+
+        // Delete user from database
+        $success = $user->delete($userId);
+
+        if ($success) {
+            $response = [
+                'success' => true,
+                'message' => 'User deleted successfully',
+                'data' => [
+                    'id' => $userId,
+                    'deleted_at' => date('Y-m-d H:i:s')
+                ]
+            ];
+
+            echo json_encode($response);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to delete user']);
+        }
+
     } catch (Exception $e) {
         http_response_code(500);
-        echo json_encode(['error' => 'Internal server error']);
+        echo json_encode(['error' => 'Internal server error: ' . $e->getMessage()]);
     }
 }
 ?>

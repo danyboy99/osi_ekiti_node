@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - Update Users | Osi-Ekiti</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Playfair Display", serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        min-height: 100vh;
+      }
+
+      /* Header */
+      .admin-header {
+        background: linear-gradient(135deg, #8b4513 0%, #6d3410 100%);
+        color: white;
+        padding: 2rem 0;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .admin-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .admin-header p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+
+      /* Container */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      /* Admin Section */
+      .admin-section {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+      }
+
+      .section-title {
+        font-size: 1.8rem;
+        color: #8b4513;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      /* Search User Form */
+      .search-user-form {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        align-items: end;
+      }
+
+      .form-group {
+        flex: 1;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .form-group input:focus {
+        outline: none;
+        border-color: #8b4513;
+        box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+      }
+
+      .search-btn {
+        background: linear-gradient(135deg, #8b4513 0%, #6d3410 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        height: fit-content;
+      }
+
+      .search-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+      }
+
+      /* Message Container */
+      .message-container {
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        border-radius: 8px;
+        display: none;
+      }
+
+      .message-container.success {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        color: #155724;
+      }
+
+      .message-container.error {
+        background-color: #f8d7da;
+        border-left: 4px solid #dc3545;
+        color: #721c24;
+      }
+
+      .message-container.info {
+        background-color: #d1ecf1;
+        border-left: 4px solid #17a2b8;
+        color: #0c5460;
+      }
+
+      /* Modal Overlay */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .modal-overlay.show {
+        display: flex;
+      }
+
+      /* Update Modal */
+      .update-modal {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        max-width: 600px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        animation: modalSlideIn 0.3s ease-out;
+      }
+
+      @keyframes modalSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e9ecef;
+      }
+
+      .modal-title {
+        font-size: 1.5rem;
+        color: #8b4513;
+        font-weight: 600;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #666;
+        transition: color 0.3s ease;
+      }
+
+      .close-btn:hover {
+        color: #dc3545;
+      }
+
+      /* Update Form */
+      .update-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .update-form .form-group {
+        margin-bottom: 1rem;
+      }
+
+      .update-form .form-group.full-width {
+        grid-column: 1 / -1;
+      }
+
+      .update-form input,
+      .update-form select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .update-form input:focus,
+      .update-form select:focus {
+        outline: none;
+        border-color: #8b4513;
+        box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+      }
+
+      /* Form Actions */
+      .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 2px solid #e9ecef;
+      }
+
+      .btn-cancel {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn-cancel:hover {
+        background-color: #5a6268;
+      }
+
+      .btn-update {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn-update:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+      }
+
+      .btn-update:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      /* Loading Spinner */
+      .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ffffff;
+        border-radius: 50%;
+        border-top-color: transparent;
+        animation: spin 1s ease-in-out infinite;
+        margin-right: 0.5rem;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .admin-header h1 {
+          font-size: 2rem;
+        }
+
+        .search-user-form {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .update-form {
+          grid-template-columns: 1fr;
+        }
+
+        .form-actions {
+          flex-direction: column;
+        }
+
+        .update-modal {
+          width: 95%;
+          padding: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Admin Header -->
+    <header class="admin-header">
+      <h1>👑 OSI-EKITI Admin Panel</h1>
+      <p>User Management System</p>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+      <!-- Update User Section -->
+      <section class="admin-section">
+        <h2 class="section-title">👤 Update User Information</h2>
+
+        <!-- Message Container -->
+        <div id="messageContainer" class="message-container">
+          <div id="messageContent"></div>
+        </div>
+
+        <!-- Search User Form -->
+        <form class="search-user-form" id="searchUserForm">
+          <div class="form-group">
+            <label for="searchFullname">Enter User's Full Name</label>
+            <input
+              type="text"
+              id="searchFullname"
+              name="searchFullname"
+              placeholder="e.g., Adebayo Ogundimu"
+              required
+            />
+          </div>
+          <button type="submit" class="search-btn" id="searchBtn">
+            🔍 Find User
+          </button>
+        </form>
+
+        <!-- Instructions -->
+        <div
+          style="
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+          "
+        >
+          <h4 style="color: #8b4513; margin-bottom: 0.5rem">
+            📋 Instructions:
+          </h4>
+          <ul style="margin-left: 1.5rem; color: #666">
+            <li>Enter the exact full name of the user you want to update</li>
+            <li>Click "Find User" to search for the user in the database</li>
+            <li>
+              If found, an update form will appear with current user information
+            </li>
+            <li>
+              Modify the fields you want to update and click "Update User"
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

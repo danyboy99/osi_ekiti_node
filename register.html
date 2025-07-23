@@ -96,7 +96,17 @@
               <p>Join our growing digital family and stay connected to home.</p>
             </div>
 
-            <form class="registration-form" id="registrationForm">
+            <!-- Message Container -->
+            <div
+              id="messageContainer"
+              class="message-container"
+              style="display: none"
+            >
+              <div id="messageContent" class="message-content"></div>
+              <button id="closeMessage" class="close-message">&times;</button>
+            </div>
+
+            <form class="registration-form" id="registrationForm" novalidate>
               <div class="form-group">
                 <label for="fullName">Full Name</label>
                 <input
@@ -104,7 +114,6 @@
                   id="fullName"
                   name="fullName"
                   placeholder="Your name"
-                  required
                 />
               </div>
 
@@ -115,7 +124,6 @@
                   id="email"
                   name="email"
                   placeholder="you@email.com"
-                  required
                 />
               </div>
 
@@ -126,7 +134,6 @@
                   id="familyName"
                   name="familyName"
                   placeholder="Your family name"
-                  required
                 />
               </div>
 
@@ -137,13 +144,12 @@
                   id="phone"
                   name="phone"
                   placeholder="+234-801-234-5678"
-                  required
                 />
               </div>
 
               <div class="form-group">
                 <label for="quarters">Quarters</label>
-                <select id="quarters" name="quarters" required>
+                <select id="quarters" name="quarters">
                   <option value="">Select your quarters</option>
                   <option value="Isale Osi">Isale Osi</option>
                   <option value="Oke Osi">Oke Osi</option>
@@ -163,7 +169,6 @@
                     id="location"
                     name="location"
                     placeholder="Lagos, NG"
-                    required
                   />
                 </div>
               </div>
@@ -171,7 +176,22 @@
               <div class="form-actions">
                 <button type="button" class="btn-cancel">Cancel</button>
                 <button type="submit" class="btn-submit" id="submitBtn">
-                  Register Now
+                  <span id="btnText">Register Now</span>
+                  <span id="btnLoader" class="btn-loader" style="display: none">
+                    <svg class="spinner" viewBox="0 0 50 50">
+                      <circle
+                        class="path"
+                        cx="25"
+                        cy="25"
+                        r="20"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="5"
+                        stroke-linecap="round"
+                      ></circle>
+                    </svg>
+                    Registering...
+                  </span>
                 </button>
               </div>
             </form>
@@ -185,14 +205,46 @@
         const form = document.getElementById("registrationForm");
         const submitBtn = document.getElementById("submitBtn");
         const cancelBtn = document.querySelector(".btn-cancel");
+        const messageContainer = document.getElementById("messageContainer");
+        const messageContent = document.getElementById("messageContent");
+        const closeMessage = document.getElementById("closeMessage");
+
+        // Function to show messages
+        function showMessage(message, type = "info") {
+          messageContent.innerHTML = message;
+          messageContainer.className = `message-container ${type}`;
+          messageContainer.style.display = "block";
+
+          // Auto-hide success messages after 5 seconds
+          if (type === "success") {
+            setTimeout(() => {
+              hideMessage();
+            }, 5000);
+          }
+        }
+
+        // Function to hide messages
+        function hideMessage() {
+          messageContainer.style.display = "none";
+        }
+
+        // Close message button
+        closeMessage.addEventListener("click", hideMessage);
 
         // Handle form submission
         form.addEventListener("submit", async function (e) {
           e.preventDefault();
+          e.stopPropagation();
 
-          // Show loading state
-          const originalText = submitBtn.textContent;
-          submitBtn.textContent = "Registering...";
+          // Hide any existing messages
+          hideMessage();
+
+          // Show loading state with spinner
+          const btnText = document.getElementById("btnText");
+          const btnLoader = document.getElementById("btnLoader");
+
+          btnText.style.display = "none";
+          btnLoader.style.display = "inline-flex";
           submitBtn.disabled = true;
 
           try {
@@ -207,8 +259,37 @@
               current_address: formData.get("location"),
             };
 
-            // Send to API
-            const response = await fetch("api/index.php", {
+            // Validate required fields on frontend
+            const requiredFields = [
+              "fullname",
+              "email",
+              "family_name",
+              "phone_no",
+              "quarters",
+              "current_address",
+            ];
+            const missingFields = [];
+
+            for (const field of requiredFields) {
+              if (!userData[field] || userData[field].trim() === "") {
+                missingFields.push(field.replace("_", " "));
+              }
+            }
+
+            if (missingFields.length > 0) {
+              showMessage(
+                `Please fill in the following required fields: ${missingFields.join(
+                  ", "
+                )}`,
+                "error"
+              );
+              return;
+            }
+
+            // Send to API - Correct endpoint
+            console.log("Sending request to API...", userData);
+
+            const response = await fetch("/osi_ekiti_node/api/users", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -216,26 +297,89 @@
               body: JSON.stringify(userData),
             });
 
+            console.log("Response status:", response.status);
+            console.log("Response headers:", response.headers);
+
             const result = await response.json();
+            console.log("Response data:", result);
 
             if (response.ok && result.success) {
               // Success
-              alert(
-                "Registration successful! Welcome to the Osi-Ekiti community!"
+              showMessage(
+                `
+                <h3>🎉 Registration Successful!</h3>
+                <p>Welcome to the Osi-Ekiti community, <strong>${userData.fullname}</strong>!</p>
+                <p>You have been successfully registered from <strong>${userData.quarters}</strong> quarters.</p>
+                <p>You can now search for family and friends in our community directory.</p>
+              `,
+                "success"
               );
               form.reset();
             } else {
-              // Error
-              const errorMessage =
-                result.error || "Registration failed. Please try again.";
-              alert("Error: " + errorMessage);
+              // Error from server
+              let errorMessage = "Registration failed. Please try again.";
+
+              if (result.error) {
+                errorMessage = result.error;
+              }
+
+              // Handle validation errors
+              if (result.details && Array.isArray(result.details)) {
+                errorMessage = `
+                  <h4>Please fix the following errors:</h4>
+                  <ul>
+                    ${result.details
+                      .map((error) => `<li>${error}</li>`)
+                      .join("")}
+                  </ul>
+                `;
+              }
+
+              showMessage(errorMessage, "error");
             }
           } catch (error) {
             console.error("Registration error:", error);
-            alert("Network error. Please check your connection and try again.");
+
+            // Check if it's a network error or parsing error
+            if (error.name === "SyntaxError") {
+              showMessage(
+                `
+                <h4>Server Response Error</h4>
+                <p>The server returned an invalid response. This might be a server configuration issue.</p>
+                <p><small>Please check the browser console for more details.</small></p>
+              `,
+                "error"
+              );
+            } else if (
+              error.name === "TypeError" &&
+              error.message.includes("fetch")
+            ) {
+              showMessage(
+                `
+                <h4>Connection Error</h4>
+                <p>Unable to connect to the server. Please check:</p>
+                <ul>
+                  <li>Your internet connection</li>
+                  <li>That XAMPP is running</li>
+                  <li>That the API endpoint is accessible</li>
+                </ul>
+              `,
+                "error"
+              );
+            } else {
+              showMessage(
+                `
+                <h4>Unexpected Error</h4>
+                <p>An unexpected error occurred: ${error.message}</p>
+                <p><small>Please check the browser console for more details.</small></p>
+              `,
+                "error"
+              );
+            }
           } finally {
             // Reset button state
-            submitBtn.textContent = originalText;
+            btnText.style.display = "inline";
+            btnLoader.style.display = "none";
             submitBtn.disabled = false;
           }
         });
@@ -244,6 +388,7 @@
         cancelBtn.addEventListener("click", function () {
           if (confirm("Are you sure you want to cancel registration?")) {
             form.reset();
+            hideMessage();
           }
         });
       });

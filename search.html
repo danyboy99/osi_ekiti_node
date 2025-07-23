@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="register.css" />
+    <link rel="stylesheet" href="search.css" />
     <script src="javascript.js" defer></script>
   </head>
   <body>
@@ -76,171 +76,353 @@
       </nav>
     </header>
 
-    <!-- Search Section -->
-    <section class="registration-section">
-      <div class="registration-container">
-        <!-- Left Side - Image -->
-        <div class="image-section">
-          <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=600&h=800&fit=crop&crop=center" alt="Community Search" class="hero-image" />
+    <!-- Hero Search Section -->
+    <section class="hero-search">
+      <div class="hero-container">
+        <!-- Left Content -->
+        <div class="hero-content">
+          <h1 class="hero-title">Search for a Familiar Face</h1>
+          <p class="hero-subtitle">
+            Reconnect with people from home — near or far
+          </p>
+
+          <!-- Search Input -->
+          <div class="search-container">
+            <div class="search-input-wrapper">
+              <svg
+                class="search-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
+              <input
+                type="text"
+                id="liveSearchInput"
+                class="search-input"
+                placeholder="Enter name, nickname, alias..."
+                autocomplete="off"
+              />
+              <div
+                id="searchLoader"
+                class="search-loader"
+                style="display: none"
+              >
+                <div class="loader-spinner"></div>
+              </div>
+            </div>
+            <button type="button" class="search-btn" id="searchBtn">
+              Find someone
+            </button>
+          </div>
+
+          <!-- Live Search Results -->
+          <div id="liveResults" class="live-results" style="display: none">
+            <div id="resultsContainer" class="results-container">
+              <!-- Results will be populated here -->
+            </div>
+          </div>
         </div>
 
-        <!-- Right Side - Search Form -->
-        <div class="form-section">
-          <div class="form-container">
-            <div class="form-header">
-              <h1>Find Your Family & Friends</h1>
-              <p>Search our community database to reconnect with loved ones and discover fellow Omo Osi members.</p>
-            </div>
+        <!-- Right Illustration -->
+        <div class="hero-illustration">
+          <div class="illustration-container">
+            <!-- Background Circles -->
+            <div class="bg-circle circle-1"></div>
+            <div class="bg-circle circle-2"></div>
+            <div class="bg-circle circle-3"></div>
+            <div class="bg-circle circle-4"></div>
 
-            <form class="registration-form" id="searchForm">
-              <div class="form-group">
-                <label for="searchName">Full Name or Family Name</label>
-                <input type="text" id="searchName" name="searchName" placeholder="Enter name to search" required />
-              </div>
-
-              <div class="form-group">
-                <label for="searchQuarters">Quarters (Optional)</label>
-                <input type="text" id="searchQuarters" name="searchQuarters" placeholder="e.g., Isale Osi, Oke Osi" />
-              </div>
-
-              <div class="form-group">
-                <label for="searchLocation">Current Location (Optional)</label>
-                <div class="location-input">
-                  <span class="location-icon">📍</span>
-                  <input type="text" id="searchLocation" name="searchLocation" placeholder="Lagos, NG" />
-                </div>
-              </div>
-
-              <div class="form-actions">
-                <button type="button" class="btn-cancel">Clear</button>
-                <button type="submit" class="btn-submit">Search Now</button>
-              </div>
-            </form>
-
-            <!-- Search Results Section -->
-            <div id="searchResults" class="search-results" style="display: none;">
-              <h3>Search Results</h3>
-              <div id="resultsList" class="results-list">
-                <!-- Results will be populated here -->
-              </div>
+            <!-- Main Illustration -->
+            <div class="people-illustration">
+              <img
+                src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=300&fit=crop&crop=center"
+                alt="Happy people celebrating"
+                class="celebration-image"
+              />
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <style>
-      .search-results {
-        margin-top: 2rem;
-        padding-top: 2rem;
-        border-top: 1px solid #ddd;
-      }
-
-      .search-results h3 {
-        color: #333;
-        margin-bottom: 1rem;
-        font-size: 1.2rem;
-      }
-
-      .results-list {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-      }
-
-      .result-item {
-        padding: 1rem;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        background-color: #f8f9fa;
-      }
-
-      .result-item h4 {
-        color: #8B4513;
-        margin-bottom: 0.5rem;
-      }
-
-      .result-item p {
-        margin: 0.25rem 0;
-        color: #666;
-        font-size: 0.9rem;
-      }
-
-      .no-results {
-        text-align: center;
-        color: #666;
-        font-style: italic;
-        padding: 2rem;
-      }
-    </style>
-
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const searchForm = document.getElementById("searchForm");
-        const searchResults = document.getElementById("searchResults");
-        const resultsList = document.getElementById("resultsList");
-        const clearBtn = document.querySelector(".btn-cancel");
+      // Live Search Implementation
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("liveSearchInput");
+        const searchBtn = document.getElementById("searchBtn");
+        const searchLoader = document.getElementById("searchLoader");
+        const liveResults = document.getElementById("liveResults");
+        const resultsContainer = document.getElementById("resultsContainer");
 
-        // Sample data (this would come from your PHP API)
-        const sampleMembers = [
-          {
-            fullname: "Adebayo Ogundimu",
-            family_name: "Ogundimu",
-            quarters: "Isale Osi",
-            current_address: "Lagos, Nigeria",
-            phone_no: "+234-801-234-5678"
-          },
-          {
-            fullname: "Folake Adeyemi",
-            family_name: "Adeyemi", 
-            quarters: "Oke Osi",
-            current_address: "Abuja, Nigeria",
-            phone_no: "+234-802-345-6789"
-          }
-        ];
+        let searchTimeout;
+        let isSearching = false;
 
-        searchForm.addEventListener("submit", (e) => {
-          e.preventDefault();
-          
-          const searchName = document.getElementById("searchName").value.toLowerCase();
-          const searchQuarters = document.getElementById("searchQuarters").value.toLowerCase();
-          const searchLocation = document.getElementById("searchLocation").value.toLowerCase();
+        // Live search as user types
+        searchInput.addEventListener("input", function () {
+          const query = this.value.trim();
 
-          // Filter results based on search criteria
-          const results = sampleMembers.filter(member => {
-            const nameMatch = member.fullname.toLowerCase().includes(searchName) || 
-                            member.family_name.toLowerCase().includes(searchName);
-            const quartersMatch = !searchQuarters || member.quarters.toLowerCase().includes(searchQuarters);
-            const locationMatch = !searchLocation || member.current_address.toLowerCase().includes(searchLocation);
-            
-            return nameMatch && quartersMatch && locationMatch;
-          });
+          // Clear previous timeout
+          clearTimeout(searchTimeout);
 
-          displayResults(results);
-        });
-
-        clearBtn.addEventListener("click", () => {
-          searchForm.reset();
-          searchResults.style.display = "none";
-        });
-
-        function displayResults(results) {
-          searchResults.style.display = "block";
-          
-          if (results.length === 0) {
-            resultsList.innerHTML = '<div class="no-results">No members found matching your search criteria.</div>';
+          if (query.length === 0) {
+            hideLiveResults();
             return;
           }
 
-          resultsList.innerHTML = results.map(member => `
-            <div class="result-item">
-              <h4>${member.fullname}</h4>
-              <p><strong>Family:</strong> ${member.family_name}</p>
-              <p><strong>Quarters:</strong> ${member.quarters}</p>
-              <p><strong>Location:</strong> ${member.current_address}</p>
-              <p><strong>Phone:</strong> ${member.phone_no}</p>
+          if (query.length < 2) {
+            return; // Wait for at least 2 characters
+          }
+
+          // Show loader
+          showLoader();
+
+          // Debounce search - wait 300ms after user stops typing
+          searchTimeout = setTimeout(() => {
+            performLiveSearch(query);
+          }, 300);
+        });
+
+        // Search button click
+        searchBtn.addEventListener("click", function () {
+          const query = searchInput.value.trim();
+          if (query.length > 0) {
+            performLiveSearch(query);
+          }
+        });
+
+        // Enter key search
+        searchInput.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            const query = this.value.trim();
+            if (query.length > 0) {
+              performLiveSearch(query);
+            }
+          }
+        });
+
+        function showLoader() {
+          searchLoader.style.display = "block";
+        }
+
+        function hideLoader() {
+          searchLoader.style.display = "none";
+        }
+
+        function showLiveResults() {
+          liveResults.style.display = "block";
+        }
+
+        function hideLiveResults() {
+          liveResults.style.display = "none";
+          hideLoader();
+        }
+
+        async function performLiveSearch(query) {
+          if (isSearching) return;
+
+          isSearching = true;
+          showLoader();
+
+          try {
+            console.log("Searching for:", query);
+
+            const response = await fetch(
+              `/osi_ekiti_node/api/search?q=${encodeURIComponent(query)}`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+
+            const result = await response.json();
+            console.log("Search response:", result);
+
+            if (response.ok && result.success) {
+              displayLiveResults(result.data, query);
+            } else {
+              displayError(result.error || "Search failed");
+            }
+          } catch (error) {
+            console.error("Search error:", error);
+            displayError("Unable to connect to search service");
+          } finally {
+            hideLoader();
+            isSearching = false;
+          }
+        }
+
+        function displayLiveResults(results, query) {
+          showLiveResults();
+
+          if (!results || results.length === 0) {
+            resultsContainer.innerHTML = `
+              <div class="no-results">
+                <div class="no-results-icon">🔍</div>
+                <h3>No results found</h3>
+                <p>No members found matching "${query}"</p>
+                <p class="suggestion">Try searching with a different name or family name</p>
+              </div>
+            `;
+            return;
+          }
+
+          const resultsHtml = results
+            .map(
+              (member) => `
+            <div class="result-card">
+              <div class="result-avatar">
+                <div class="avatar-circle">
+                  ${member.fullname.charAt(0).toUpperCase()}
+                </div>
+              </div>
+              <div class="result-info">
+                <h3 class="result-name">${highlightMatch(
+                  member.fullname,
+                  query
+                )}</h3>
+                <p class="result-family">Family: ${highlightMatch(
+                  member.family_name,
+                  query
+                )}</p>
+                <div class="result-details">
+                  <span class="result-quarters">📍 ${member.quarters}</span>
+                  <span class="result-location">🏠 ${
+                    member.current_address
+                  }</span>
+                </div>
+                <div class="result-contact">
+                  <div class="contact-item">
+                    <span class="result-phone">📞 ${member.phone_no}</span>
+                    <button class="copy-btn" onclick="copyToClipboard('${
+                      member.phone_no
+                    }', 'phone')" title="Copy phone number">
+                      📋
+                    </button>
+                  </div>
+                  <div class="contact-item">
+                    <span class="result-email">✉️ ${member.email}</span>
+                    <button class="copy-btn" onclick="copyToClipboard('${
+                      member.email
+                    }', 'email')" title="Copy email">
+                      📋
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-          `).join('');
+          `
+            )
+            .join("");
+
+          resultsContainer.innerHTML = `
+            <div class="results-header">
+              <h3>Found ${results.length} member${
+            results.length !== 1 ? "s" : ""
+          }</h3>
+              <p>Search results for "${query}"</p>
+            </div>
+            <div class="results-list">
+              ${resultsHtml}
+            </div>
+          `;
+        }
+
+        function highlightMatch(text, query) {
+          if (!query) return text;
+          const regex = new RegExp(`(${query})`, "gi");
+          return text.replace(regex, "<mark>$1</mark>");
+        }
+
+        function displayError(message) {
+          showLiveResults();
+          resultsContainer.innerHTML = `
+            <div class="error-message">
+              <div class="error-icon">⚠️</div>
+              <h3>Search Error</h3>
+              <p>${message}</p>
+              <button onclick="location.reload()" class="retry-btn">Try Again</button>
+            </div>
+          `;
+        }
+
+        // Global function for copy to clipboard
+        window.copyToClipboard = async function (text, type) {
+          try {
+            await navigator.clipboard.writeText(text);
+
+            // Show success feedback
+            const button = event.target;
+            const originalText = button.textContent;
+
+            button.textContent = "✅";
+            button.style.backgroundColor = "#28a745";
+
+            setTimeout(() => {
+              button.textContent = originalText;
+              button.style.backgroundColor = "";
+            }, 2000);
+
+            // Optional: Show toast notification
+            showToast(
+              `${
+                type === "phone" ? "Phone number" : "Email"
+              } copied to clipboard!`
+            );
+          } catch (err) {
+            console.error("Failed to copy: ", err);
+
+            // Fallback for older browsers
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+
+            showToast(
+              `${
+                type === "phone" ? "Phone number" : "Email"
+              } copied to clipboard!`
+            );
+          }
+        };
+
+        // Toast notification function
+        function showToast(message) {
+          // Remove existing toast if any
+          const existingToast = document.querySelector(".toast-notification");
+          if (existingToast) {
+            existingToast.remove();
+          }
+
+          // Create toast element
+          const toast = document.createElement("div");
+          toast.className = "toast-notification";
+          toast.textContent = message;
+
+          // Add to page
+          document.body.appendChild(toast);
+
+          // Show toast
+          setTimeout(() => {
+            toast.classList.add("show");
+          }, 100);
+
+          // Hide and remove toast
+          setTimeout(() => {
+            toast.classList.remove("show");
+            setTimeout(() => {
+              if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+              }
+            }, 300);
+          }, 3000);
         }
       });
     </script>

@@ -33,24 +33,5 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Form submission functionality for registration form
-document.addEventListener("DOMContentLoaded", () => {
-  // Form submission
-  const registrationForm = document.getElementById("registrationForm");
-  if (registrationForm) {
-    registrationForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      // Get form data
-      const formData = new FormData(registrationForm);
-
-      // Here you would typically send the data to your server
-      console.log("Registration form submitted:", Object.fromEntries(formData));
-
-      // Show success message (you can customize this)
-      alert(
-        "Registration submitted successfully! We'll review your application and get back to you soon."
-      );
-    });
-  }
-});
+// Form submission functionality is now handled in individual pages
+// This prevents conflicts with page-specific form handlers

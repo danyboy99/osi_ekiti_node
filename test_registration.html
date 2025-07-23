@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-form {
+            display: grid;
+            gap: 15px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input, select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 12px 24px;
+            background-color: #8b4513;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #6d3410;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid;
+        }
+        .success {
+            background-color: #d4edda;
+            border-left-color: #28a745;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border-left-color: #dc3545;
+            color: #721c24;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Registration Form Test</h1>
+        <p>Use this form to test the registration API and message handling.</p>
+        
+        <div id="messageArea"></div>
+        
+        <form id="testForm" class="test-form">
+            <div class="form-group">
+                <label for="fullname">Full Name:</label>
+                <input type="text" id="fullname" name="fullname" placeholder="John Doe" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="john@example.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="family_name">Family Name:</label>
+                <input type="text" id="family_name" name="family_name" placeholder="Doe Family" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone_no">Phone Number:</label>
+                <input type="tel" id="phone_no" name="phone_no" placeholder="+234-801-234-5678" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="quarters">Quarters:</label>
+                <select id="quarters" name="quarters" required>
+                    <option value="">Select quarters</option>
+                    <option value="Isale Osi">Isale Osi</option>
+                    <option value="Oke Osi">Oke Osi</option>
+                    <option value="Agbado">Agbado</option>
+                    <option value="Odo Osi">Odo Osi</option>
+                    <option value="Oke Agbe">Oke Agbe</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="current_address">Current Address:</label>
+                <input type="text" id="current_address" name="current_address" placeholder="Lagos, Nigeria" required>
+            </div>
+            
+            <button type="submit" id="submitBtn">Test Registration</button>
+        </form>
+        
+        <div style="margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 5px;">
+            <h3>Test Scenarios:</h3>
+            <ul>
+                <li><strong>Valid Registration:</strong> Fill all fields correctly</li>
+                <li><strong>Missing Fields:</strong> Leave some fields empty</li>
+                <li><strong>Invalid Email:</strong> Enter invalid email format</li>
+                <li><strong>Duplicate Email:</strong> Use same email twice</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('testForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const messageArea = document.getElementById('messageArea');
+            const originalText = submitBtn.textContent;
+            
+            // Clear previous messages
+            messageArea.innerHTML = '';
+            
+            // Show loading state
+            submitBtn.textContent = 'Testing...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Get form data
+                const formData = new FormData(this);
+                const userData = {};
+                for (let [key, value] of formData.entries()) {
+                    userData[key] = value;
+                }
+                
+                console.log('Sending data:', userData);
+                
+                // Send to API
+                const response = await fetch('api/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                });
+                
+                const result = await response.json();
+                console.log('Response:', result);
+                
+                if (response.ok && result.success) {
+                    messageArea.innerHTML = `
+                        <div class="message success">
+                            <h3>✅ Success!</h3>
+                            <p>${result.message}</p>
+                            <p><strong>User ID:</strong> ${result.data.id}</p>
+                            <p><strong>Created:</strong> ${result.data.created_at}</p>
+                        </div>
+                    `;
+                    this.reset();
+                } else {
+                    let errorHtml = `<div class="message error"><h3>❌ Error</h3>`;
+                    
+                    if (result.error) {
+                        errorHtml += `<p><strong>Error:</strong> ${result.error}</p>`;
+                    }
+                    
+                    if (result.details && Array.isArray(result.details)) {
+                        errorHtml += '<ul>';
+                        result.details.forEach(detail => {
+                            errorHtml += `<li>${detail}</li>`;
+                        });
+                        errorHtml += '</ul>';
+                    }
+                    
+                    errorHtml += '</div>';
+                    messageArea.innerHTML = errorHtml;
+                }
+                
+            } catch (error) {
+                console.error('Network error:', error);
+                messageArea.innerHTML = `
+                    <div class="message error">
+                        <h3>❌ Network Error</h3>
+                        <p>Unable to connect to the server.</p>
+                        <p><small>${error.message}</small></p>
+                    </div>
+                `;
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

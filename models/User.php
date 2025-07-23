@@ -71,6 +71,13 @@ class User {
         $stmt->execute();
         return $stmt->fetch();
     }
+
+    /**
+     * Alias for getById to match the route usage
+     */
+    public function findById($id) {
+        return $this->getById($id);
+    }
     
     /**
      * Search users

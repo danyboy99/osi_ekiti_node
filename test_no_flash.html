@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test No Flash Messages</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #8b4513;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #6d3410;
+        }
+        .message {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+        .success {
+            background-color: #d4edda;
+            border-left-color: #28a745;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border-left-color: #dc3545;
+            color: #721c24;
+        }
+        .instructions {
+            background-color: #e7f3ff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Flash Message Test</h1>
+        
+        <div class="instructions">
+            <h3>Test Instructions:</h3>
+            <ol>
+                <li><strong>Leave all fields empty</strong> and click "Test Submit"</li>
+                <li><strong>Check if any flash message appears at the top of the browser</strong> (near the URL bar)</li>
+                <li>If no flash message appears, the fix is working! ✅</li>
+                <li>If a flash message still appears, we need more fixes ❌</li>
+            </ol>
+        </div>
+        
+        <div id="messageArea"></div>
+        
+        <form id="testForm" novalidate>
+            <div class="form-group">
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" placeholder="Leave empty to test">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Leave empty to test">
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" name="phone" placeholder="Leave empty to test">
+            </div>
+            
+            <div class="form-group">
+                <label for="quarters">Quarters:</label>
+                <select id="quarters" name="quarters">
+                    <option value="">Select quarters (leave empty to test)</option>
+                    <option value="Isale Osi">Isale Osi</option>
+                    <option value="Oke Osi">Oke Osi</option>
+                </select>
+            </div>
+            
+            <button type="submit">Test Submit (Should NOT show flash message)</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('testForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const messageArea = document.getElementById('messageArea');
+            
+            // Simulate validation
+            const formData = new FormData(this);
+            const missingFields = [];
+            
+            if (!formData.get('fullName')) missingFields.push('Full Name');
+            if (!formData.get('email')) missingFields.push('Email');
+            if (!formData.get('phone')) missingFields.push('Phone');
+            if (!formData.get('quarters')) missingFields.push('Quarters');
+            
+            if (missingFields.length > 0) {
+                messageArea.innerHTML = `
+                    <div class="message error">
+                        <h4>✅ Perfect! No Flash Message!</h4>
+                        <p>The validation is working correctly with our custom message system.</p>
+                        <p><strong>Missing fields:</strong> ${missingFields.join(', ')}</p>
+                        <p><small>If you see this message and NO flash message appeared at the top of your browser, the fix is working!</small></p>
+                    </div>
+                `;
+            } else {
+                messageArea.innerHTML = `
+                    <div class="message success">
+                        <h4>✅ Form Complete!</h4>
+                        <p>All fields filled. No flash messages should appear.</p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

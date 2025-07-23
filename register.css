@@ -361,3 +361,126 @@ body {
     font-size: 1.5rem;
   }
 }
+
+/* Message Container Styles */
+.message-container {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  position: relative;
+  border-left: 4px solid;
+  animation: slideDown 0.3s ease-out;
+}
+
+.message-container.success {
+  background-color: #d4edda;
+  border-left-color: #28a745;
+  color: #155724;
+}
+
+.message-container.error {
+  background-color: #f8d7da;
+  border-left-color: #dc3545;
+  color: #721c24;
+}
+
+.message-container.info {
+  background-color: #d1ecf1;
+  border-left-color: #17a2b8;
+  color: #0c5460;
+}
+
+.message-content {
+  margin-right: 2rem;
+}
+
+.message-content h3,
+.message-content h4 {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.message-content p {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.message-content ul {
+  margin-left: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.message-content li {
+  margin-bottom: 0.25rem;
+}
+
+.close-message {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.close-message:hover {
+  opacity: 1;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading Spinner Styles */
+.btn-loader {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+.spinner .path {
+  stroke-dasharray: 90, 150;
+  stroke-dashoffset: 0;
+  animation: dash 1.5s ease-in-out infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}
